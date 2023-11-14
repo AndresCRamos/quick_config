@@ -38,9 +38,12 @@ sudo apt autoremove
 echo Copying config dotfiles
 dir="dotfiles"
 
+set +e
 for file in "$dir"/.* "$dir"/*; do
     if [ -f "$file" ]; then
-        echo "    ${file#$dir/}"
+        real_file="    ${file#$dir/}"
+        echo $real_file
+        rm $HOME/$real_file
         ln -s $(realpath $file) $HOME
     fi
 done
