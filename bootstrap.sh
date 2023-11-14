@@ -46,4 +46,4 @@ for file in "$dir"/.* "$dir"/*; do
 done
 
 echo Logging to github
-gh login
+gh auth login
