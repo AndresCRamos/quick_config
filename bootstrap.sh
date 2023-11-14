@@ -24,7 +24,7 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/too
 
 echo Installing Power10k
 git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
-sed -i 's/ZSH_THEME="[a-zA-Z0-9]*"/ZSH_THEME="power10k\/powerlevel10k"/g' $HOME/.zshrc
+sed -i 's/ZSH_THEME="[a-zA-Z0-9]*"/ZSH_THEME="powerlevel10k\/powerlevel10k"/g' $HOME/.zshrc
 
 echo Installing Apt packages:
 packages_file="apt_packages"
