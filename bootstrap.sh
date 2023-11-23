@@ -14,10 +14,6 @@ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
   echo "[ -s \"$NVM_DIR/bash_completion\" ] && \. \"$NVM_DIR/bash_completion\"  # This loads nvm bash_completion"
 } >> "$HOME/.zshrc"
 
-
-
-
-
 echo Add gh repo
 curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg \
 && sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg \
@@ -57,3 +53,7 @@ done
 
 echo Logging to github
 gh auth login
+
+# Change default gh browser to ms edge
+PATH=$PATH:/mnt/c/"Program Files (x86)"/Microsoft/Edge/Application
+gh config set browser msedge.exe
