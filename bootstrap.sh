@@ -8,12 +8,15 @@ sudo apt install zsh
 
 echo Installing nvm
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
-echo export NVM_DIR="$HOME/.nvm" >> $HOME/.zshrc
-echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm' >> $HOME/.zshrc
-echo '[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion' >> $HOME/.zshrc
+{ 
+  echo "export NVM_DIR=\"$HOME/.nvm\""
+  echo "[ -s \"$NVM_DIR/nvm.sh\" ] && \. \"$NVM_DIR/nvm.sh\"  # This loads nvm"
+  echo "[ -s \"$NVM_DIR/bash_completion\" ] && \. \"$NVM_DIR/bash_completion\"  # This loads nvm bash_completion"
+} >> "$HOME/.zshrc"
 
-export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+
+
+
 
 echo Add gh repo
 curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg \
@@ -27,16 +30,16 @@ echo Installing OhMyZSH
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
 echo Installing Power10k
-git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
-sed -i 's/ZSH_THEME="[a-zA-Z0-9]*"/ZSH_THEME="powerlevel10k\/powerlevel10k"/g' $HOME/.zshrc
+git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k"
+sed -i 's/ZSH_THEME="[a-zA-Z0-9]*"/ZSH_THEME="powerlevel10k\/powerlevel10k"/g' "$HOME/.zshrc"
 
 echo Installing Apt packages:
 packages_file="apt_packages"
 packages=$(cat $packages_file)
-echo $packages
+echo "$packages"
 
 sudo apt update
-sudo apt install -y $packages
+sudo apt install -y "$packages"
 sudo apt autoremove
 
 echo Copying config dotfiles
@@ -45,10 +48,10 @@ dir="dotfiles"
 set +e
 for file in "$dir"/.* "$dir"/*; do
     if [ -f "$file" ]; then
-        real_file="    ${file#$dir/}"
-        echo $real_file
-        rm $HOME/$real_file
-        ln -s $(realpath $file) $HOME
+        real_file="${file#"$dir"/}"
+        echo "$real_file"
+        rm "$HOME/$real_file"
+        ln -s "$(realpath "$file")" "$HOME"
     fi
 done
 
