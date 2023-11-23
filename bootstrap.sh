@@ -8,11 +8,6 @@ sudo apt install zsh
 
 echo Installing nvm
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
-{ 
-  echo "export NVM_DIR=\"$HOME/.nvm\""
-  echo "[ -s \"$NVM_DIR/nvm.sh\" ] && \. \"$NVM_DIR/nvm.sh\"  # This loads nvm"
-  echo "[ -s \"$NVM_DIR/bash_completion\" ] && \. \"$NVM_DIR/bash_completion\"  # This loads nvm bash_completion"
-} >> "$HOME/.zshrc"
 
 echo Add gh repo
 curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg \
@@ -57,3 +52,16 @@ gh auth login
 # Change default gh browser to ms edge
 PATH=$PATH:/mnt/c/"Program Files (x86)"/Microsoft/Edge/Application
 gh config set browser msedge.exe
+
+# initialize nvm on zsh (has be done now because p10k theme overrides old .zshrc)
+{ 
+  echo "export NVM_DIR=\"$HOME/.nvm\""
+  echo "[ -s \"$NVM_DIR/nvm.sh\" ] && \. \"$NVM_DIR/nvm.sh\"  # This loads nvm"
+  echo "[ -s \"$NVM_DIR/bash_completion\" ] && \. \"$NVM_DIR/bash_completion\"  # This loads nvm bash_completion"
+} >> "$HOME/.zshrc"
+
+#shellcheck source=/dev/null
+. "$HOME/.zshrc"
+#shellcheck source=/dev/null
+. "$HOME/.p10k.zsh"
+
