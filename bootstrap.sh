@@ -30,8 +30,9 @@ packages=$(cat $packages_file)
 echo "$packages"
 
 sudo apt update
-sudo apt install -y "$packages"
-sudo apt autoremove
+sudo apt install nala
+sudo nada install -y "$packages"
+sudo nada autoremove
 
 echo Copying config dotfiles
 dir="dotfiles"
