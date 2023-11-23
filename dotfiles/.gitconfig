@@ -1,3 +1,7 @@
 [user]
 	email = 57693598+AndresCRamos@users.noreply.github.com
 	name = AndresCRamos
+[web]
+	browser = edge
+[browser "edge"]
+	path = /mnt/c/"Program Files (x86)"/Microsoft/Edge/Application/msedge.exe
