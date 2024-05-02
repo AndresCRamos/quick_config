@@ -1,12 +1,12 @@
 bashtop
-cmatrix
 docker
 gh
-golang
-htop
 neofetch
-ngrok
-snapd
+neovim
+net-tools
+pipenv
 tmux
 trash-cli
 tree
+unzip
+zip

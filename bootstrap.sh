@@ -2,20 +2,18 @@
 
 set -e
 
-echo "Install zsh (this has to be done to avoid problems)"
+echo "Install nala"
 sudo apt update
-sudo apt install zsh
+sudo apt install -y nala
 
-echo Installing nvm
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
+echo "Install zsh (this has to be done to avoid problems)"
+sudo nala install -y zsh
 
 echo Add gh repo
-curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg \
-&& sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg \
-&& echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
-
-echo Add ngrok repo
-curl -s https://ngrok-agent.s3.amazonaws.com/ngrok.asc | sudo tee /etc/apt/trusted.gpg.d/ngrok.asc >/dev/null && echo "deb https://ngrok-agent.s3.amazonaws.com buster main" | sudo tee /etc/apt/sources.list.d/ngrok.list
+sudo mkdir -p -m 755 /etc/apt/keyrings \
+&& curl -fsLS https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo tee /etc/apt/keyrings/githubcli-archive-keyring.gpg > /dev/null \
+&& sudo chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg \
+&& echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
 
 echo Installing OhMyZSH
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
@@ -24,20 +22,34 @@ echo Installing Power10k
 git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k"
 sed -i 's/ZSH_THEME="[a-zA-Z0-9]*"/ZSH_THEME="powerlevel10k\/powerlevel10k"/g' "$HOME/.zshrc"
 
-echo Installing Apt packages:
-packages_file="apt_packages"
-packages=$(cat $packages_file)
-echo "$packages"
+echo Installing nvm
+curl -fsSLo- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | zsh
 
-sudo apt update
-sudo apt install nala
-sudo nada install -y "$packages"
-sudo nada autoremove
+echo "Install pyenv"
+curl -fsSLo https://pyenv.run | zsh
+
+echo "Install gvm"
+sudo nala install bison  golang-go -y
+curl -fsSLo- https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer| zsh
+
+echo Installing nala packages:
+sudo nala update
+packages_file="apt_packages"
+
+# Read the contents of the file line by line and install each package
+set +e
+while IFS= read -r pkg || [ -n "$pkg" ]; do
+    echo Install $pkg
+    sudo nala install $pkg -y
+done < "$packages_file"
+
+echo "All packages installed successfully."
+sudo nala autoremove
 
 echo Copying config dotfiles
 dir="dotfiles"
 
-set +e
+
 for file in "$dir"/.* "$dir"/*; do
     if [ -f "$file" ]; then
         real_file="${file#"$dir"/}"
@@ -54,15 +66,4 @@ gh auth login
 PATH=$PATH:/mnt/c/"Program Files (x86)"/Microsoft/Edge/Application
 gh config set browser msedge.exe
 
-# initialize nvm on zsh (has be done now because p10k theme overrides old .zshrc)
-{ 
-  echo "export NVM_DIR=\"$HOME/.nvm\""
-  echo "[ -s \"$NVM_DIR/nvm.sh\" ] && \. \"$NVM_DIR/nvm.sh\"  # This loads nvm"
-  echo "[ -s \"$NVM_DIR/bash_completion\" ] && \. \"$NVM_DIR/bash_completion\"  # This loads nvm bash_completion"
-} >> "$HOME/.zshrc"
-
-#shellcheck source=/dev/null
-. "$HOME/.zshrc"
-#shellcheck source=/dev/null
-. "$HOME/.p10k.zsh"
-
+echo Finished
